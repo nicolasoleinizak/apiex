@@ -1,29 +1,66 @@
 const fs = require('fs')
 const path = require('path')
-const { env } = require('process')
+const fileWriter = require('../utils/fileWriter')
+
+const yargs = require('yargs')
+const { hideBin } = require('yargs/helpers')
+const { EXPRESS_VERSION, NODE_DEV_VERSION } = require('../../config/constants')
+const argv = yargs(hideBin(process.argv)).argv
 
 const projectBasePath = process.cwd()
 
-function init () {
-    console.log("Initializing Apiarius...")
-    env["ES_MODULE"] = true
-    // Create folder structure
-    
+const init = () => {
+    console.log("Initializing Apiex...")
+    process.env.ES_MODULE = argv.es_module !== undefined? argv.es_module === 'true' : true
+    process.env.PORT = argv.port !== undefined? argv.port : 4000
+    setPackageConfig()
+    createMain()
+    createSrcDirectory()
+    createApp()
     createController()
     createRouter()
 }
 
-function createController () {
-    createFolder(projectBasePath, 'controller')
+const createMain = () => {
+    const packageConfigFile = fs.readFileSync(`${process.cwd()}/package.json`)
+    const packageConfigContent = JSON.parse(packageConfigFile)
+    const mainFilePath = packageConfigContent.main?? `${process.cwd()}/index.js`
+
+    const template = require('../templates/main')
+    const content = template()
+    fileWriter(mainFilePath, content, (err) => {
+        if(err){
+            console.log(err)
+        }
+    })
 }
 
-function createRouter () {
-    createFolder(projectBasePath, 'routes')
+const createSrcDirectory = () => {
+    createFolder(projectBasePath, 'src')
+}
+
+const createApp = () => {
+    const appPath = `${process.cwd()}/src/app.js`
+    const template = require('../templates/app')
+    const content = template()
+    fileWriter(appPath, content, (err) => {
+        if (err) {
+            console.log(err)
+        }
+    })
+}
+
+const createController = () => {
+    createFolder(projectBasePath, 'src/controllers')
+}
+
+const createRouter = () => {
+    createFolder(projectBasePath, 'src/routes')
     createRouterIndex(projectBasePath)
     createRoutersTemplate()
 }
 
-function createFolder (basePath, newDir) {
+const createFolder = (basePath, newDir) => {
     const path = `${basePath}/${newDir}`
     if(!fs.existsSync(path)){
         fs.mkdir(path, (err) => {
@@ -32,30 +69,44 @@ function createFolder (basePath, newDir) {
             }
         })
     } else {
-        console.log("Controller folder already exists")
+        console.log(`${newDir} folder already exists`)
     }
 }
 
-function createRouterIndex (basePath) {
-    const path = `${basePath}/routes/index.js`
-    const template = require('./templates/router')
-    const content = template({
-        ESModule: false
-    })
-    fs.writeFile(path, content, (err) => {
-        if(err){
-            console.log(err)
-        }
-    })
+const createRouterIndex = (basePath) => {
+    const path = `${basePath}/src/routes/index.js`
+    const routerContent = require('../templates/router')()
+    fileWriter(path, routerContent)
 }
 
-function createRoutersTemplate() {
+const createRoutersTemplate = () => {
     const projectBasePath = process.cwd()
-    const path = `${projectBasePath}\\routes\\routers.js`
-    const content = require('../make/templates/routers')()
-    fs.writeFile(path, content, (err) => {
+    const path = `${projectBasePath}/src/routes/routers.js`
+    const routersContent = require('../templates/routers')()
+    fileWriter(path, routersContent)
+}
+
+const setPackageConfig = () => {
+    const packagePath = `${process.cwd()}/package.json`
+    fs.readFile(packagePath, (err, data) => {
         if (err) {
-            console.log(err)
+            console.log("Error on reading the package.json file. Check if you are in your project root and the file exists")
+            return
+        } else {
+            const packageContent = JSON.parse(data)
+            packageContent.dependencies['express'] = EXPRESS_VERSION
+            packageContent.dependencies['node-dev'] = NODE_DEV_VERSION
+            packageContent.scripts['dev:server'] = 'node-dev ./index.js'
+            console.log(process.env.ES_MODULE)
+            if(process.env.ES_MODULE === 'true'){
+                console.log("Setting type")
+                packageContent["type"] = "module"
+            }
+            fs.writeFile(packagePath, JSON.stringify(packageContent, null, 4), (err) => {
+                if(err){
+                    console.log(err)
+                }
+            })
         }
     })
 }

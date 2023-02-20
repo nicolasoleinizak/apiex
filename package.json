@@ -1,10 +1,10 @@
 {
   "name": "apiex",
   "version": "1.0.0",
-  "description": "API REST creation superset and CLI",
+  "description": "ExpressJS project creation CLI assistant",
   "main": "bin/index.js",
   "bin": {
-    "apiarius": "./bin/index.js"
+    "apiex": "./bin/index.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -12,8 +12,8 @@
   "author": "Nicolás Oleinizak",
   "license": "MIT",
   "dependencies": {
-    "express": "4.18.0",
-    "ts-node-dev": "^2.0.0",
+    "prompt-sync": "^4.2.0",
+    "typescript": "^4.9.5",
     "yargs": "^17.6.2"
   },
   "keywords": [
@@ -22,5 +22,6 @@
     "Express",
     "Node",
     "Nodejs"
-  ]
+  ],
+  "scope": "@nicolas.oleinizak/apiex"
 }
