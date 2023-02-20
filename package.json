@@ -1,15 +1,15 @@
 {
-  "name": "apiex",
+  "name": "fastex",
   "version": "1.0.0",
   "description": "ExpressJS project creation CLI assistant",
   "main": "bin/index.js",
   "bin": {
-    "apiex": "./bin/index.js"
+    "fastex": "./bin/index.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Nicolás Oleinizak",
+  "author": "@nicolasoleinizak",
   "license": "MIT",
   "dependencies": {
     "prompt-sync": "^4.2.0",
@@ -22,6 +22,5 @@
     "Express",
     "Node",
     "Nodejs"
-  ],
-  "scope": "@nicolas.oleinizak/apiex"
+  ]
 }

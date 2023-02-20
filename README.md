@@ -1,6 +1,6 @@
-# Apiex
+# Fastex
 
-Apiex is an command line interface (CLI) that can help to to initialize the basic structure for ExpressJs projects.
+Fastex is an command line interface (CLI) that can help to to initialize the basic structure for ExpressJs projects.
 
 The CLI has two commands so far, but will grow and incorporate news feature that makes your dev-time easier.
 
@@ -14,9 +14,9 @@ Initialize the project with basic folder structure and main files. This scaffold
 
 `npm init`
 
-2) Init your Express project with Apiex
+2) Init your Express project with Fastex
 
-`apiex init [options]`
+`fastex init [options]`
 
 #### Options: 
 
@@ -26,7 +26,7 @@ Initialize the project with basic folder structure and main files. This scaffold
 
 Example:
 
-`apiex init --es_module=false --port=3000`
+`fastex init --es_module=false --port=3000`
 
 ## **Make router**
 
@@ -34,7 +34,7 @@ Creates a new router in the 'routes' folder and imports it on 'routes/routers.js
 
 ### Command
 
-`apiex make:router [name] [path]`
+`fastex make:router [name] [path]`
 
 #### Options:
 
@@ -44,5 +44,5 @@ Creates a new router in the 'routes' folder and imports it on 'routes/routers.js
 
 Example:
 
-`apiex make:router --name=exampleRouter --path=/example`
+`fastex make:router --name=exampleRouter --path=/example`
 

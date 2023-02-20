@@ -1,10 +1,9 @@
 const fs = require('fs')
-const path = require('path')
 const fileWriter = require('../utils/fileWriter')
 
 const yargs = require('yargs')
 const { hideBin } = require('yargs/helpers')
-const { EXPRESS_VERSION, NODE_DEV_VERSION } = require('../../config/constants')
+const { EXPRESS_VERSION, NODE_DEV_VERSION } = require('../config/constants')
 const argv = yargs(hideBin(process.argv)).argv
 
 const projectBasePath = process.cwd()
